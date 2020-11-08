@@ -1,4 +1,4 @@
-import pandas as pd
+#import pandas as pd
 import random as rd
 import time
 
@@ -11,56 +11,67 @@ import time
      ④Support built-in guarantee prize
 
     关键字说明：
-    @prizeTotalDict：PrizesDict类型的一个实例，总卡池
-    @
+    @TOTAL_STORE：Prizes类型的一个实例，总卡池
+    @PR: 设定抽取概率
 """
+#本次测试仅仅使用内置参数
 
-class PrizesDict:   #卡池基本模板
+
+class Prizes:   #卡池基本模板
+
     def __init__(self,ur_list,ssr_list,sr_list,r_list):
-        self.prdict={}
-        self.prdict['ur'] = ur_list
-        self.prdict['ssr'] = ssr_list
-        self.prdict['sr'] = sr_list
-        self.prdict['r'] = r_list
-#尝试将这个字典直接封装为类型，可通过外部xls等文件导入
-#本次测试仅仅使用内置参数    
+        self.ur = ur_list
+        self.ssr = ssr_list
+        self.sr = sr_list
+        self.r = r_list
+
 
 def range_list(start,amount):
     #生成一系列连续编号并返回列表
+    return [item for item in range(start,start+amount)]
+    #[exp for iter_var in iterable]
+"""
+等效于
     lst = []
     for num in range(start,start+amount):
         lst.append(num)
     return lst
+"""
 
-
-TOTEL_STORE = PrizesDict(range_list(6001,10),
-                        range_list(5001,20),
-                        range_list(4001,30),
-                        range_list(3001,15))
-#仓库初始化，这是一个全局字典，包含10个ur，20个ssr，30个sr，15个r
+TOTAL_STORE = Prizes(range_list(6001,10), range_list(5001,20),
+                     range_list(4001,30), range_list(3001,15))
+#仓库初始化，这是一个全局Prizes类，包含10个ur，20个ssr，30个sr，15个r
 #卡池内容从该仓库中取得
-PROBA = {'ur':0.02,'ssr':0.23,'sr':0.35,'r':0.4}
 
-def selectPrize(ur_list,ssr_list,PrizeDict=TOTEL_STORE):
+PR = (('ur',0.02),('ssr',0.08),('sr',0.35),('r',0.55))
+#设定概率
+
+
+def selectPrize(ur_list,ssr_list,prizes=TOTAL_STORE):
     #选取卡池内容
-    Selected_Prize = PrizesDict(ur_list,ssr_list,
-                                PrizeDict.prdict['sr'],
-                                PrizeDict.prdict['r'])  
-                    #当期卡池
-    print_current_prizes(Selected_Prize)
-    return Selected_Prize
+    selected_prizes = Prizes(ur_list, ssr_list,
+                             prizes.sr,
+                             prizes.r)
+    #当期卡池
+    print_current_prizes(selected_prizes)
+    return selected_prizes
 
-def print_current_prizes(Selected_Prize,probabl=PROBA):
+
+def print_current_prizes(selected_prizes, pbty=PR):
     #打印当期卡池与概率
-    for key in probabl.keys():
-        print(Selected_Prize.prdict[key].items()+": "+probabl[key])
-###
-def testfunction():
-    test=selectPrize([6002,6005],[5001,5006,5009])
-    print(test)
-###
+    pass
+    prizes_dict = selected_prizes.__dict__
+    print(prizes_dict)
 
-testfunction()
+
+def test_function():
+    test = selectPrize([6002,6005],[5001,5006,5009])
+    print(test)
+
+
+test_function()
+
+
 def getPoolContent(Selected_Prize):
     pass
     prizeRates = []
@@ -70,8 +81,6 @@ def getPoolContent(Selected_Prize):
 
     #卡池列表初始化，key-value:编号-数量比例
     #为便于测试，
-
-
 
 
 gachaResultDict = {}
